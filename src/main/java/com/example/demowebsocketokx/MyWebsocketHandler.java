@@ -38,19 +38,18 @@ public class MyWebsocketHandler implements WebSocketHandler {
         //how to do this ????
         try {
             var loginResponse = mapper.readValue(message.getPayload().toString(), LoginResponse.class);
-
-            var subscribeArg = SubscribeArg.builder()
-                    .instType("ANY")
-                    .channel("orders")
-                    .build();
-            List<SubscribeArg> args = new ArrayList<>();
-            args.add(subscribeArg);
-            var subscribeRequest = SubscribeRequest.builder()
-                    .op("subscribe")
-                    .args(args)
-                    .build();
-
+            
             if (loginResponse.getCode().equals("0")) {
+                var subscribeArg = SubscribeArg.builder()
+                        .instType("ANY")
+                        .channel("orders")
+                        .build();
+                List<SubscribeArg> args = new ArrayList<>();
+                args.add(subscribeArg);
+                var subscribeRequest = SubscribeRequest.builder()
+                        .op("subscribe")
+                        .args(args)
+                        .build();
                 String subscribeJson = mapper.writeValueAsString(subscribeRequest);
                 session.sendMessage(new TextMessage(subscribeJson));
             }
