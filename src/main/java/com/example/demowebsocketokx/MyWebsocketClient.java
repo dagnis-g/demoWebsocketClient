@@ -17,9 +17,8 @@ import java.net.URI;
 public class MyWebsocketClient {
 
     private final MyWebsocketHandler myWebsocketHandler;
-    private static String URL = "wss://wspap.okx.com:8443/ws/v5/public?brokerId=9999";
-//    private static String URL = "ws://demo.piesocket.com/v3/channel_1?api_key=VCXCEuvhGcBDP7XhiJJUDvR1e1D3eiVjgZ9VRiaV&notify_self"; // for testing only
-
+    private static String URL = "wss://wspap.okx.com:8443/ws/v5/private?brokerId=9999";
+    
     @EventListener(ApplicationReadyEvent.class)
     public void connect() {
         WebSocketClient client = new StandardWebSocketClient();
@@ -28,6 +27,6 @@ public class MyWebsocketClient {
         headers.add("x-simulated-trading", "1");
         client.doHandshake(myWebsocketHandler, headers, URI.create(URL));
 
-        log.info("Connecting maybe");
+        log.info("Connecting");
     }
 }

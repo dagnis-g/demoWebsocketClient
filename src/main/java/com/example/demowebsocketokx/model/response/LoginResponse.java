@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class LoginResponse {
     private String event;
-    private String code;
     private String msg;
+    private String code;
 }
