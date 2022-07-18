@@ -15,6 +15,7 @@ import java.util.List;
 
 @Component
 public class LoginRequestEncoder {
+
     private final String API_KEY = Secrets.API_KEY;
     private final String SECRET_KEY = Secrets.SECRET_KEY;
     private final String PASSPRHASE = Secrets.PASSPHRASE;
@@ -38,7 +39,7 @@ public class LoginRequestEncoder {
                 .op("login")
                 .args(args)
                 .build();
-        
+
         return login;
     }
 

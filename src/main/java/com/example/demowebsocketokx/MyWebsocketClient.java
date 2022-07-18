@@ -1,37 +1,33 @@
 package com.example.demowebsocketokx;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.messaging.converter.MappingJackson2MessageConverter;
-import org.springframework.messaging.simp.stomp.StompSessionHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketHttpHeaders;
 import org.springframework.web.socket.client.WebSocketClient;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
-import org.springframework.web.socket.messaging.WebSocketStompClient;
+
+import java.net.URI;
 
 @Slf4j
 @Component
-public class MyStompClient {
+@RequiredArgsConstructor
+public class MyWebsocketClient {
 
-    private static String URL = "wss://wspap.okx.com:8443/ws/v5/private?brokerId="
-//            + Secrets.BROKER_ID;
-            + "9999";
+    private final MyWebsocketHandler myWebsocketHandler;
+    private static String URL = "wss://wspap.okx.com:8443/ws/v5/public?brokerId=9999";
+//    private static String URL = "ws://demo.piesocket.com/v3/channel_1?api_key=VCXCEuvhGcBDP7XhiJJUDvR1e1D3eiVjgZ9VRiaV&notify_self"; // for testing only
 
     @EventListener(ApplicationReadyEvent.class)
     public void connect() {
         WebSocketClient client = new StandardWebSocketClient();
-        WebSocketStompClient stompClient = new WebSocketStompClient(client);
-
-        stompClient.setMessageConverter(new MappingJackson2MessageConverter());
 
         WebSocketHttpHeaders headers = new WebSocketHttpHeaders();
         headers.add("x-simulated-trading", "1");
-        
-        StompSessionHandler sessionHandler = new MyStompSessionHandler();
+        client.doHandshake(myWebsocketHandler, headers, URI.create(URL));
 
-        stompClient.connect(URL, headers, sessionHandler);
         log.info("Connecting maybe");
     }
 }
